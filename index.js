@@ -13,12 +13,18 @@ module.exports = function(ret, conf, settings, opt){
   var reg = new RegExp('(\/[^\\?\\*\\|<>:"]+)\\' + settings.placeholder, 'mg'); // 匹配占位符的正则
   var hasGenerate = {}; // 记录已经处理过的文件
   var cb = settings.replace; // 自定义的替换函数
+  var root = fis.project.getProjectPath();
 
   // 根据匹配到的路径，返回对应文件
   var findFile = function(subpath) {
     var file = ret.pkg[subpath] || ret.src[subpath];
 
     if (!file) {
+      for (var k in ret.pkg) {
+        if (ret.pkg[k].release === subpath) {
+          return ret.pkg[k];
+        }
+      }
       for (var k in ret.src) {
         if (ret.src[k].release === subpath) {
           return ret.src[k];
