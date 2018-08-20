@@ -66,11 +66,12 @@ module.exports = function(ret, conf, settings, opt){
 
   fis.util.map(ret.src, function (subpath, file) {
     if(file.ext === '.ts'){
-			file.map.uri = file.release + '?' + key + '=' + fis.util.md5(file.getContent());
-		}
-		else{
+			if(!ret.pkg[subpath]){
+				ret.pkg[subpath] = file;
+				file.map.uri = file.release + '?' + key + '=' + fis.util.md5(file.getContent() , 14);
+			}
+	}
       replace(subpath, file);
-		}
   });
   
   hasGenerate = null;
