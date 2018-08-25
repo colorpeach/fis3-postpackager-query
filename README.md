@@ -1,5 +1,7 @@
 # fis3-postpackager-query
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/colorpeach/fis3-postpackager-query.svg)](https://greenkeeper.io/)
+
 给文件添加自定义query，默认是md5
 
 ## 安装
