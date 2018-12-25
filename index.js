@@ -4,8 +4,9 @@ var path = require("path");
 
 module.exports = function(ret, conf, settings, opt) {
 	if (!settings.placeholder) {
-		fis.log.error("fis3-postpackager-query: 缺少query占位参数");
-		return;
+		//fis.log.error("fis3-postpackager-query: 缺少query占位参数");
+		//return;
+		settings.placeholder = "?__=" + Date.now();
 	}
 
 	var placeholder = settings.placeholder.split("=");
@@ -19,21 +20,21 @@ module.exports = function(ret, conf, settings, opt) {
 	var findFile = function(subpath) {
 		var file = ret.pkg[subpath] || ret.src[subpath];
 
-	var v_path = "";
+		var v_path = "";
 		if (!file) {
 			for (var k in ret.pkg) {
 				//存在url和release同时存在，url会覆盖release
 				v_path = ret.pkg[k].domain + (ret.pkg[k].url ? ret.pkg[k].url : ret.pkg[k].release);
 				if (v_path === subpath) {
-				  return ret.pkg[k];
+					return ret.pkg[k];
 				}
-			  }
-			  for (var k in ret.src) {
+			}
+			for (var k in ret.src) {
 				v_path = ret.src[k].domain + (ret.src[k].url ? ret.src[k].url : ret.src[k].release);
 				if (v_path === subpath) {
-				  return ret.src[k];
+					return ret.src[k];
 				}
-			  }
+			}
 		}
 
 		return file;
@@ -71,17 +72,17 @@ module.exports = function(ret, conf, settings, opt) {
 
 
 	fis.util.map(ret.src, function(subpath, file) {
-		if(file.ext === '.ts' || file.ext === '.js'){
-			if(!ret.pkg[subpath]){
+		if (file.isJsLike || file.isCssLike) {
+			if (!ret.pkg[subpath]) {
 				ret.pkg[subpath] = file;
 
-				var qs ;
+				var qs;
 				if (cb) {
 					qs = cb({}, {}, file);
 				} else {
-					qs = fis.util.md5(file.getContent() , 7);
+					qs = fis.util.md5(file.getContent(), 7);
 				}
-				file.map.uri = file.release + '?' + key + '=' + qs;
+				file.map.uri = file.release + "?" + key + "=" + qs;
 			}
 		}
 		replace(subpath, file);
