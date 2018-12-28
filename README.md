@@ -13,6 +13,11 @@ npm install -g fis3-postpackager-query
 ### 配置
 
 ```js
+
+fis.match('*.{js,css,png,gif}', {
+    useHash: false // 先关闭默认的md5 戳
+});
+
 // 设置占位符
 var query = '?v=' + Date.now();
 
