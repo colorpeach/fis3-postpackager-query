@@ -1,6 +1,6 @@
 "use strict";
 
-var path = require("path");
+
 
 module.exports = function(ret, conf, settings, opt) {
 	if (!settings.placeholder) {
@@ -14,24 +14,19 @@ module.exports = function(ret, conf, settings, opt) {
 	var reg = new RegExp('(/[^\\?\\*\\|<>:"]+)\\' + settings.placeholder, "mg"); // 匹配占位符的正则
 	var hasGenerate = {}; // 记录已经处理过的文件
 	var cb = settings.replace; // 自定义的替换函数
-	var root = fis.project.getProjectPath();
 
 	// 根据匹配到的路径，返回对应文件
 	var findFile = function(subpath) {
 		var file = ret.pkg[subpath] || ret.src[subpath];
 
-		var v_path = "";
 		if (!file) {
 			for (var k in ret.pkg) {
-				//存在url和release同时存在，url会覆盖release
-				v_path = ret.pkg[k].domain + (ret.pkg[k].url ? ret.pkg[k].url : ret.pkg[k].release);
-				if (v_path === subpath) {
+				if (ret.pkg[k].release === subpath) {
 					return ret.pkg[k];
 				}
 			}
 			for (var k in ret.src) {
-				v_path = ret.src[k].domain + (ret.src[k].url ? ret.src[k].url : ret.src[k].release);
-				if (v_path === subpath) {
+				if (ret.src[k].release === subpath) {
 					return ret.src[k];
 				}
 			}
@@ -69,22 +64,17 @@ module.exports = function(ret, conf, settings, opt) {
 		return content;
 	};
 
-
-
 	fis.util.map(ret.src, function(subpath, file) {
-		if (file.isJsLike || file.isCssLike) {
-			if (!ret.pkg[subpath]) {
-				ret.pkg[subpath] = file;
-
-				var qs;
-				if (cb) {
-					qs = cb({}, {}, file);
-				} else {
-					qs = fis.util.md5(file.getContent(), 7);
-				}
-				file.map.uri = file.release + "?" + key + "=" + qs;
+		/*if (file.isJsLike || file.isCssLike) {
+			var qs;
+			if (cb) {
+				qs = cb({}, {}, file);
+			} else {
+				qs = fis.util.md5(file.getContent(), 7);
 			}
-		}
+			//file.map.uri = file.release + "?" + key + "=" + qs;
+			file.map.uri = file.map.uri.split("?" + key + "=")[0] + "?" + key + "=" + qs;
+		}*/
 		replace(subpath, file);
 	});
 
