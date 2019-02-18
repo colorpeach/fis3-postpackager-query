@@ -65,7 +65,7 @@ module.exports = function(ret, conf, settings, opt) {
 	};
 
 	fis.util.map(ret.src, function(subpath, file) {
-		/*if (file.isJsLike || file.isCssLike) {
+		if (file.isJsLike || file.isCssLike) {
 			var qs;
 			if (cb) {
 				qs = cb({}, {}, file);
@@ -74,7 +74,7 @@ module.exports = function(ret, conf, settings, opt) {
 			}
 			//file.map.uri = file.release + "?" + key + "=" + qs;
 			file.map.uri = file.map.uri.split("?" + key + "=")[0] + "?" + key + "=" + qs;
-		}*/
+		}
 		replace(subpath, file);
 	});
 
