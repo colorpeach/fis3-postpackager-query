@@ -73,7 +73,12 @@ module.exports = function(ret, conf, settings, opt) {
 				qs = fis.util.md5(file.getContent(), 7);
 			}
 			//file.map.uri = file.release + "?" + key + "=" + qs;
-			file.map.uri = file.map.uri.split("?" + key + "=")[0] + "?" + key + "=" + qs;
+			
+			// 当fis-conf.js中配置了 url 时，存在bug，暂时先用这个判断规避一下
+			// https://fis.baidu.com/fis3/docs/api/config-props.html#url
+			if(file.map){
+				file.map.uri = file.map.uri.split("?" + key + "=")[0] + "?" + key + "=" + qs;
+			}
 		}
 		replace(subpath, file);
 	});
