@@ -1,6 +1,6 @@
 {
   "name": "fis3-postpackager-query",
-  "version": "0.0.2",
+  "version": "0.5.12",
   "description": "fis3 postpackager，给文件添加自定义query，默认是md5",
   "main": "index.js",
   "repository": {
