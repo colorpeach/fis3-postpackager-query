@@ -4,9 +4,11 @@
 
 module.exports = function(ret, conf, settings, opt) {
 	if (!settings.placeholder) {
-		//fis.log.error("fis3-postpackager-query: 缺少query占位参数");
-		//return;
-		settings.placeholder = "?__=" + Date.now();
+		fis.log.error("fis3-postpackager-query: 缺少query占位参数");
+		return;
+
+		//用Date.now()会由于缓存导致query值不一样
+		//settings.placeholder = "?__=md5";
 	}
 
 	var placeholder = settings.placeholder.split("=");
@@ -26,7 +28,7 @@ module.exports = function(ret, conf, settings, opt) {
 				}
 			}
 			for (var k in ret.src) {
-				if (ret.src[k].release === subpath) {
+				if (ret.src[k].url === subpath) {
 					return ret.src[k];
 				}
 			}
@@ -65,22 +67,20 @@ module.exports = function(ret, conf, settings, opt) {
 	};
 
 	fis.util.map(ret.src, function(subpath, file) {
-		if (file.isJsLike || file.isCssLike) {
+		if (file._isText) {
 			var qs;
 			if (cb) {
 				qs = cb({}, {}, file);
 			} else {
 				qs = fis.util.md5(file.getContent(), 7);
 			}
-			//file.map.uri = file.release + "?" + key + "=" + qs;
-			
-			// 当fis-conf.js中配置了 url 时，存在bug，暂时先用这个判断规避一下
-			// https://fis.baidu.com/fis3/docs/api/config-props.html#url
+
 			if(file.map){
 				file.map.uri = file.map.uri.split("?" + key + "=")[0] + "?" + key + "=" + qs;
 			}
+			
+			replace(subpath, file);
 		}
-		replace(subpath, file);
 	});
 
 	hasGenerate = null;
