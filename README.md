@@ -19,7 +19,7 @@ fis.match('*.{js,css,png,gif}', {
 });
 
 // 设置占位符
-var query = '?v=' + Date.now();
+var query = '?v=SOME_STRING'; //不要使用 Date.now()，由于缓存会导致问题;
 
 // 应用占位符
 fis.match('*', {
