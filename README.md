@@ -5,7 +5,7 @@
 ## 安装
 
 ```
-npm install -g fis3-postpackager-query
+npm i -g git+ssh://git@github.com/rpdg/fis3-postpackager-query.git
 ```
 
 ## 使用方法
