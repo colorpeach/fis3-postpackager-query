@@ -5,7 +5,7 @@
 ## 安装
 
 ```
-npm install -g fis3-postpackager-query
+npm i -g git+ssh://git@github.com/rpdg/fis3-postpackager-query.git
 ```
 
 ## 使用方法
@@ -13,8 +13,13 @@ npm install -g fis3-postpackager-query
 ### 配置
 
 ```js
+
+fis.match('*.{js,css,png,gif}', {
+    useHash: false // 先关闭默认的md5 戳
+});
+
 // 设置占位符
-var query = '?v=' + Date.now();
+var query = '?v=SOME_STRING'; //不要使用 Date.now()，由于缓存会导致问题;
 
 // 应用占位符
 fis.match('*', {
